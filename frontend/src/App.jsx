@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import Navbar from "./components/NavBar";
 import { Navigate, Route, Routes } from "react-router-dom";
 
 import HomePage from "./pages/HomePage";
@@ -7,6 +6,7 @@ import SignUpPage from "./pages/SignUpPage";
 import ProfilePage from "./pages/ProfilePage";
 import SettingPage from "./pages/SettingPage";
 import LoginPage from "./pages/LoginPage";
+import Navbar from "./components/NavBar";
 import { UserAuthStore } from "./store/userAuthStore.js";
 
 import {Loader} from "lucide-react";
