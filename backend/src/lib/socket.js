@@ -33,6 +33,43 @@ io.on("connection",(socket) => {
         delete userSocketMap[userId];   
         io.emit("getOnlineUsers",Object.keys(userSocketMap));
     })
+
+    socket.on("call-initiated",(data) => {
+        console.log("Call initiated:",data);
+        const receiverSocketId = getReceiverSocketId(data.to._id);
+        console.log(receiverSocketId);
+        io.to(receiverSocketId).emit("incoming-call",{caller:data.from});
+    })
+
+    socket.on("reject-call",(data) => {
+        console.log("Call rejected:",data);
+        const receiverSocketId = getReceiverSocketId(data.to._id);
+        io.to(receiverSocketId).emit("call-rejected",{from:data.from});
+    })
+
+    socket.on("accept-call",(data) => {
+        console.log("Call accepted:",data);
+        const receiverSocketId = getReceiverSocketId(data.to._id);
+        io.to(receiverSocketId).emit("call-accepted",{from:data.from});
+    })
+
+    socket.on("connect-to-peer",(data) => {
+        console.log("Connecting to peer:",data);
+        const receiverSocketId = getReceiverSocketId(data.from._id);
+        io.to(receiverSocketId).emit("peer-connection-initiated",{to:data.to,from:data.from});
+    })
+
+    socket.on("send-offer",(data) => {
+        console.log("Sending offer:",data);
+        const receiverSocketId = getReceiverSocketId(data.to._id);
+        io.to(receiverSocketId).emit("receive-offer",{to:data.to,from:data.from,offer:data.offer});
+    })
+
+    socket.on("send-answer",(data) => {
+        console.log("Sending answer:",data);
+        const receiverSocketId = getReceiverSocketId(data.from._id);
+        io.to(receiverSocketId).emit("receive-answer",{to:data.to,from:data.from,answer:data.answer});
+    })
 })
 
 export {io,app,server};
